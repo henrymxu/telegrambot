@@ -4,7 +4,7 @@ const lyrics = require('./getlyric.js')
 const reddit = require('./getreddit.js')
 const coinmarket = require('./getcoin.js')
 
-const BOT_TOKEN = '546701409:AAFuhCSl0V2G-ZHMCd9vVsaNdhoUBLQ8Aj0'
+const BOT_TOKEN = 'TOKEN_FKING_RIChARD'
 app = express()
 app.listen(process.env.PORT || 8080)
 
