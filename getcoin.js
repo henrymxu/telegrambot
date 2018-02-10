@@ -24,7 +24,11 @@ module.exports = {
   },
   getTopN: function (count) {
     return new Promise(function(resolve, reject) {
-      global._number = 10;
+      if (isNaN(count)) {
+        global._number = 10;
+      } else {
+        global._number = count;
+      }
       request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           resolve(getCoinRanking(body))

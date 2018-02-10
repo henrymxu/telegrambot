@@ -7,7 +7,6 @@ const coinmarket = require('./getcoin.js')
 
 app = express()
 app.listen(process.env.PORT || 8080)
-console.log (process.env.BOT_TOKEN)
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
 bot.start((ctx) => {
@@ -43,7 +42,7 @@ bot.command('getcoin', (ctx) => {
 })
 
 bot.command('listcoins', (ctx) => {
-  var count = ctx.update.message.text.split("/getcoin ")[1]
+  var count = ctx.update.message.text.split("/listcoins ")[1]
   Promise.resolve(coinmarket.getTopN(count)).then(function(values) {
     ctx.replyWithMarkdown(values);
   }, function(values) {
