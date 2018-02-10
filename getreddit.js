@@ -6,8 +6,14 @@ const client_secret=process.env.REDDIT_SECRET
 const reddit_password=process.env.REDDIT_PASSWORD
 
 const url = 'https://www.reddit.com/r/'
+var _count = 3;
 module.exports = {
-  apiSearch: function(subreddit) {
+  apiSearch: function(subreddit, count) {
+    if (!isNaN(count)) {
+      global._count = count;
+    } else {
+      global._count = 3;
+    }
     return new Promise(function(resolve, reject) {
         authenticateReddit().then(function (token) {
         searchReddit(token, subreddit).then(function (json) {
@@ -66,7 +72,7 @@ function parseReddit(json) {
   while (listings[stickyCounter].data.stickied == true) {
     stickyCounter++;
   }
-  for (var i = stickyCounter; i < (5 + stickyCounter); i++) {
+  for (var i = stickyCounter; i < (global._count + stickyCounter); i++) {
     result = {}
     result.title = listings[i].data.title
     result.url = listings[i].data.url
@@ -79,7 +85,7 @@ function parseReddit(json) {
 function formatReddit(result) {
   var string = []
   for (var i = 0; i < result.length; i++) {
-    string[i] = (i+1) + '. ' + result[i].score + ' [' + result[i].title.replace(/'/g, '\'') + '](' + result[i].url + ')';
+    string[i] = (i+1) + '. ' + result[i].score + ' [' + result[i].title.replace(/'/g, '\'').replace(/"/g, '\"').replace(/[\[\]']+/g,'') + '](' + result[i].url + ')';
   }
   return string;
 }

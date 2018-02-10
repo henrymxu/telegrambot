@@ -4,7 +4,8 @@ const phantom = require('phantom');
 
 const url = 'https://api.coinmarketcap.com/v1/ticker/?convert=CAD&limit=0'
 var _coin;
-var _number = 10;
+var _count = 10;
+
 module.exports = {
   search: function (coin) {
     return new Promise(function(resolve, reject) {
@@ -23,12 +24,12 @@ module.exports = {
     })
   },
   getTopN: function (count) {
+    if (!isNaN(count)) {
+      global._count = count;
+    } else {
+      global._count = 10;
+    }
     return new Promise(function(resolve, reject) {
-      if (isNaN(count)) {
-        global._number = 10;
-      } else {
-        global._number = count;
-      }
       request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           resolve(getCoinRanking(body))
@@ -63,7 +64,7 @@ function getCoinValue(body) {
 function getCoinRanking(body) {
   var result = JSON.parse(body);
   var returnString = '';
-  for (var i = 0; i < global._number; i++) {
+  for (var i = 0; i < global._count; i++) {
     returnString += '*Coin:* `' + result[i].name + '` *Value:* `$' + result[i].price_cad + '` *7d:* `' + result[i].percent_change_7d + '%`\n'
   }
   return returnString;

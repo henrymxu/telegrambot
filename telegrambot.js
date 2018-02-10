@@ -27,7 +27,13 @@ bot.command('getlyric', (ctx) => {
 
 bot.command('getreddit', (ctx) => {
   var subreddit = ctx.update.message.text.split("/getreddit ")[1]
-  Promise.resolve(reddit.apiSearch(subreddit)).then(function(values) {
+  var indexOfSpace = subreddit.indexOf(' ')
+  if (indexOfSpace >= 0) {
+    subreddit = subreddit.substring(0, indexOfSpace);
+  }
+  console.log(subreddit)
+  var count = ctx.update.message.text.split("/getreddit ")[1].split(' ')[1]
+  Promise.resolve(reddit.apiSearch(subreddit, count)).then(function(values) {
     for (var i = 0; i < values.length; i++) {
       ctx.replyWithMarkdown(values[i]);
     }
